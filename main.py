@@ -58,3 +58,6 @@ def search():
     jobs = get_filtered_jobs(jobs, job_fields, published_dates, locations, companies)
     
     return jobs, 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
