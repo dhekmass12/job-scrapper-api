@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        .custom-input{
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Search Jobs</h1>
+
+<form th:action="@{/jobs}" th:object="${filterJobDTO}" method="post">
+    <div class="form-group">
+        <div class="col-xs-2">
+            <label for="jobFieldsInput">Job Fields: </label>
+            <input th:field="*{jobFields}" type="text" class="form-control mb-4 custom-input" id="jobFieldsInput">
+        </div>
+        <div class="col-xs-2">
+            <label for="publishedDatesInput">Published Dates: </label>
+            <input th:field="*{publishedDates}" type="text" class="form-control mb-4 custom-input" id="publishedDatesInput">
+        </div>
+        <div class="col-xs-2">
+            <label for="locationsInput">Locations: </label>
+            <input th:field="*{locations}" type="text" class="form-control mb-4 custom-input" id="locationsInput">
+        </div>
+        <div class="col-xs-2">
+            <label for="companiesInput">Companies: </label>
+            <input th:field="*{companies}" type="text" class="form-control mb-4 custom-input" id="companiesInput">
+        </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>
