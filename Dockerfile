@@ -6,7 +6,7 @@ ARG BUILD_HOME=/job-scrapper-api
 #
 # Gradle image for the build stage.
 #
-FROM gradle:jdk21 as build-image
+FROM gradle:jdk11 as build-image
 
 #
 # Set the working directory.
@@ -31,7 +31,7 @@ RUN gradle --no-daemon build
 #
 # Java image for the application to run in.
 #
-FROM openjdk:21-alpine
+FROM openjdk:12-alpine
 
 #
 # Copy the jar file in and name it app.jar.
