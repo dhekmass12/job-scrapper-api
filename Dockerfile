@@ -1,46 +1,23 @@
-#
-# Set a variable that can be used in all stages.
-#
-ARG BUILD_HOME=/job-scrapper-api
+FROM docker.io/library/eclipse-temurin:21-jdk-alpine AS builder
 
-#
-# Gradle image for the build stage.
-#
-FROM gradle:jdk11 as build-image
+WORKDIR /src/iap
+COPY . .
+RUN ./gradlew clean bootJar
 
-#
-# Set the working directory.
-#
-ARG BUILD_HOME
-ENV APP_HOME=$BUILD_HOME
-WORKDIR $APP_HOME
+FROM docker.io/library/eclipse-temurin:21-jre-alpine AS runner
 
+#ARG USER_NAME=iap
+#ARG USER_UID=1000
+#ARG USER_GID=${USER_UID}
 #
-# Copy the Gradle config, source code, and static analysis config
-# into the build container.
-#
-COPY --chown=gradle:gradle build.gradle settings.gradle $APP_HOME/
-COPY --chown=gradle:gradle src $APP_HOME/src
-COPY --chown=gradle:gradle config $APP_HOME/config
+#RUN addgroup -g ${USER_GID} ${USER_NAME} \
+#    && adduser -h /opt/advshop -D -u ${USER_UID} -G ${USER_NAME} ${USER_NAME}
 
-#
-# Build the application.
-#
-RUN gradle --no-daemon build
+#USER ${USER_NAME}
+WORKDIR /opt/iap
+COPY --from=builder /src/iap/build/libs/*.jar app.jar
 
-#
-# Java image for the application to run in.
-#
-FROM openjdk:12-alpine
+EXPOSE 8080
 
-#
-# Copy the jar file in and name it app.jar.
-#
-ARG BUILD_HOME
-ENV APP_HOME=$BUILD_HOME
-COPY --from=build-image $APP_HOME/build/libs/job-scrapper-api.jar app.jar
-
-#
-# The command to run when the container starts.
-#
-ENTRYPOINT java -jar app.jar
+ENTRYPOINT ["java"]
+CMD ["-jar", "app.jar"]
