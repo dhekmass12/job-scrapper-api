@@ -48,6 +48,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
 
+
 sonar {
     properties {
         property("sonar.projectKey", "dhekmass12_job-scrapper-api")
