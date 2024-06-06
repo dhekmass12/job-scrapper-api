@@ -1,10 +1,23 @@
-FROM openjdk:8-jdk
+FROM docker.io/library/eclipse-temurin:21-jdk-alpine AS builder
 
-RUN mkdir /app
+WORKDIR /src/advshop
+COPY . .
+RUN ./gradlew clean bootJar
 
-COPY app.jar /app/app.jar
+FROM docker.io/library/eclipse-temurin:21-jre-alpine AS runner
 
-WORKDIR /app
+ARG USER_NAME=advshop
+ARG USER_UID=1000
+ARG USER_GID=${USER_UID}
+
+RUN addgroup -g ${USER_GID} ${USER_NAME} \
+    && adduser -h /opt/advshop -D -u ${USER_UID} -G ${USER_NAME} ${USER_NAME}
+
+USER ${USER_NAME}
+WORKDIR /opt/advshop
+COPY --from=builder --chown=${USER_UID}:${USER_GID} /src/advshop/build/libs/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java"]
+CMD ["-jar", "app.jar"]
