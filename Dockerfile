@@ -1,6 +1,6 @@
 FROM gradle:jdk21-alpine
 WORKDIR /app
 RUN ls
-COPY ./job-scrapper-api-0.0.1-SNAPSHOT.jar /app
+COPY ./job-scrapper-api-1.0-SNAPSHOT.jar /app
 EXPOSE 8080
-CMD ["java","-jar","job-scrapper-api-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","job-scrapper-api-1.0-SNAPSHOT.jar"]
